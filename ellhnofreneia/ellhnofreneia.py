@@ -50,7 +50,9 @@ class Logger():
 class Library(Logger):
     def __init__(self):
         Logger.__init__(self)
-        if not os.path.exists(LOCAL_LIBRARY):raise ValueError
+        if not os.path.exists(LOCAL_LIBRARY):
+            print LOCAL_LIBRARY
+            raise ValueError
         self.podcasts = {}
         self.log('Using library at:{0}'.format(LOCAL_LIBRARY))
         self.COMPRESS_SIZEMB_TRIGGER = 20
@@ -89,7 +91,7 @@ class Library(Logger):
         all_podcasts = []
         p = Podcast(currentDate.year, currentDate.month, currentDate.day)
         all_podcasts.append(p)
-        while not p.existsLocal():  # and len(all_podcasts) < 15:
+        while not p.existsLocal() and len(all_podcasts) < 100:
             currentDate = currentDate - datetime.timedelta(1)
             p = Podcast(currentDate.year, currentDate.month, currentDate.day)
             all_podcasts.append(p)
@@ -101,11 +103,12 @@ class Library(Logger):
             if self.podcastDownload(pod):
                 downloads += 1
                 self.podcastTag(pod)
-             
         self.log('Downloaded {0} podcast(s)'.format(downloads))
+        
     def podcastDownloadFromDate(self, thisDate):
         p = Podcast(thisDate.year, thisDate.month, thisDate.day)
         self.downloadPodcast(p)
+    
     @retry(Exception, 20, 5)
     def podcastDownload(self, podcast):
         from utils import wget
@@ -235,7 +238,7 @@ class Podcast(Logger):
     def getURL(self):
         days_greek = {1:['DEYTERA'], 2:['TRITi','TRITH'], 
                       3:['TETARTH'], 4:['PEMPTi','PEMPTI'], 
-                      5:['PARASKEYI','PARASKEYi','PARASKEYIok'], 0:[''], 6:['']}
+                      5:['PARASKEYI','PARASKEYi','PARASKEYIok','PARASKEUI'], 0:[''], 6:['']}
         
         for day in days_greek[int(self.bday.strftime('%w').lower())]:
             url_podcast=self.urlFormat.format(self.bday.year,
