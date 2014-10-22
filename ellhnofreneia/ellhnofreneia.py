@@ -10,7 +10,7 @@ from pprint import pprint
 
 FILENAME_PREFIX = r'Ellfren-'
 
-if os.path.isdir('i:\\'):
+if os.path.isdir(r'I:\Music\Sorted\Comedy\Ellhnofreneia'):
     LOCAL_LIBRARY = r'I:\Music\Sorted\Comedy\Ellhnofreneia\Shows'
 else:
     LOCAL_LIBRARY = r'W:\Music\Ellhnofreneia'
