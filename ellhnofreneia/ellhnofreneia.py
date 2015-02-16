@@ -236,8 +236,8 @@ class Podcast(Logger):
         return '<Podcast: {0}>'.format(self.bday)
     
     def getURL(self):
-        days_greek = {1:['DEYTERA'], 2:['TRITi','TRITH'], 
-                      3:['TETARTH'], 4:['PEMPTi','PEMPTI'], 
+        days_greek = {1:['DEYTERA'], 2:['TRITi','TRITi','TRITH'], 
+                      3:['TETARTHok','TETARTH'], 4:['PEMPTi','PEMPTI','PEMPTi'], 
                       5:['PARASKEYI','PARASKEYi','PARASKEYIok','PARASKEUI'], 0:[''], 6:['']}
         
         for day in days_greek[int(self.bday.strftime('%w').lower())]:
@@ -296,7 +296,11 @@ class Podcast(Logger):
         tag.setTrackNum((trackNumber, None))
         tag.addLyrics(self.getURL())
         tag.update()
-        self.log('Tagged podcast {0} / {1} / {2}'.format(artist, album, title))
+        try:
+            self.log('Tagged podcast {0} / {1} / {2}'.format(artist, album, title))
+        except Exception,e:
+            print e
+            
         return True
     def isDownloadable(self):
         return self.bday.weekday() < 5 and (not self.existsLocal()) and self.existsRemote()
